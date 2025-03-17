@@ -119,7 +119,8 @@ const UserDataTable = () => {
                         <DownloadTableExcel
                             filename="users table"
                             sheet="users"
-                            currentTableRef={tableRef.current}>
+                            // currentTableRef={tableRef.current}
+                        >
                             <button className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
                                 Export To Excel
                             </button>

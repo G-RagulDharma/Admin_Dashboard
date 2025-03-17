@@ -3,8 +3,6 @@ import jsPDF from 'jspdf'
 import 'jspdf-autotable'
 
 const useExportPDF = () => {
-
-    //Export to PDF
     const exportToPDF = (users) => {
         const doc = new jsPDF();
         doc.text("Users Data", 20, 10);
@@ -27,7 +25,7 @@ const useExportPDF = () => {
         doc.save("UserTable.pdf");
 
     }
-  return {exportToPDF};
+    return { exportToPDF };
 };
 
 export default useExportPDF;
