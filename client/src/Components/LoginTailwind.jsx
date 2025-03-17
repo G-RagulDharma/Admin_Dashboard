@@ -3,9 +3,10 @@ import Container from "react-bootstrap/esm/Container";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
-import { UserContext } from "../Context/Create_Context";
+import { UserContext } from "../Context/CreateContext";
 import { useAuth } from "../Context/useAuth";
 import { useNavigate } from "react-router-dom";
+import Dashboard1 from "./Dashboard1";
 
 const Login_Tailwind_css = () => {
     const [userNa, setUserName] = useState("")
@@ -24,30 +25,30 @@ const Login_Tailwind_css = () => {
         if (userNa == userName && userPwd == pwd) {
             login(validUser)
             alert("Login success")
-            navigate("/user")
+            navigate("/Dashboard1")
         }
         else {
             alert("Login Failed")
         }
     }
     return (
-        <Container fluid className="flex justify-center vw-100 vh-100 items-center fluid">
-            <div className="p-5 rounded bg-white w-sm h-80 shadow-2xl">
+        <Container fluid className="flex justify-center items-center min-h-screen bg-[#F4F7FC]">
+            <div className="p-6 rounded-lg bg-white w-96 shadow-xl">
                 <form onSubmit={handleSubmit}>
-                    <h3 className="flex justify-center mb-8 my-2 text-4xl text-[#1aa3ff]">Sign-In</h3>
+                    <h3 className="text-2xl font-semibold text-[#1E293B] text-center mb-6">Sign-In</h3>
                     <div className="relative mt-4">
                         <FontAwesomeIcon icon={faEnvelope} className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        <input type='email' placeholder='Email' className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-8" onChange={(e) => setUserName(e.target.value)}></input>
+                        <input type='email' placeholder='Email' className="w-full p-3 border border-[#E5E7EB] rounded-lg mb-4 focus:ring-[#1E40AF] focus:border-[#1E40AF]" onChange={(e) => setUserName(e.target.value)}></input>
                     </div>
                     <div className="relative mt-3">
                         <FontAwesomeIcon icon={faKey} className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                        <input type="password" placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mt-4" onChange={(e) => setPwd(e.target.value)} />
+                        <input type="password" placeholder="Password" className="w-full p-3 border border-[#E5E7EB] rounded-lg mb-4 focus:ring-[#1E40AF] focus:border-[#1E40AF]" onChange={(e) => setPwd(e.target.value)} />
                     </div>
                     <div className='grid mt-4'>
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-blue-600 w-full py-2 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition rounded"
+                            className="w-full py-3 bg-[#1E40AF] text-white font-medium rounded-lg shadow-md hover:bg-[#1D4ED8] transition"
                         >
                             Submit
                         </motion.button>

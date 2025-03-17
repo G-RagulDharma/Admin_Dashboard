@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container';
 
-const Login_Bootstrap = () => {
+const LoginBootstrap = () => {
     return (
         <>
             <Container fluid className='d-flex justify-content-center align-items-center vw-100 vh-100' style={{ backgroundColor: "#e6ccff" }}>
@@ -30,4 +30,4 @@ const Login_Bootstrap = () => {
         </>
     );
 };
-export default Login_Bootstrap;
+export default LoginBootstrap;

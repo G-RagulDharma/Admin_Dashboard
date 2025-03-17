@@ -1,13 +1,11 @@
 import React from "react"
 import { useState, createContext, useContext } from "react";
-import Login_Tailwind_css from "../Components/Login_Tailwind_css";
+import Login_Tailwind_css from "../Components/LoginTailwind";
 import Dashboard1 from "../Components/Dashboard1";
 
 export const UserContext = createContext(null); // Create Context
 
-export const useUser = () => useContext(UserContext); // Custom Hook
-
-const Create_Context = () => {
+const CreateContext = () => {
     const [userName, setuserName] = useState("ragul@gmail.com")
     const [userPwd, setPassword] = useState("ragul123")
 
@@ -21,4 +19,4 @@ const Create_Context = () => {
     )
 };
 
-export default Create_Context;
+export default CreateContext;

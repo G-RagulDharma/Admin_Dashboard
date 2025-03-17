@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react"
 import Container from "react-bootstrap/esm/Container";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login_Tailwind_css from "./Login_Tailwind_css";
+import Login_Tailwind_css from "./LoginTailwind";
 import User from "./User";
-import User_DataTable from "./User_DataTable";
+import User_DataTable from "./UserDataTable";
 import '../index.css';
 import { useNavigate } from "react-router-dom";
-import Create_Context from "../Context/Create_Context";
-import {AuthProvider} from "../Context/useAuth";
+import Create_Context from "../Context/CreateContext";
+import { AuthProvider } from "../Context/useAuth";
+import { useAuth } from "../Context/useAuth";
+
 
 const Dashboard1 = () => {
 
-    
+
     const navigate = useNavigate();
+    const { user,logout } = useAuth();
+    const [showMenu, setShowMenu] = useState(false);
+
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/"); // Redirect to login
+        }
+    }, [user, navigate]);
 
     return (
         <Container fluid className="bg-gray-100 vw-100 vh-full p-0 ">
@@ -29,13 +40,33 @@ const Dashboard1 = () => {
                     ></img>
                 </div>
                 <Container className="justify-end flex items-center">
-                    <div className="item-center ms-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/7153/7153150.png" alt="user" className="h-8 w-8 ml-[5px] cursor-pointer"
-                            onClick={() => window.location.replace("/Login")}>
-
-                        </img>
-                        <h5 className="text-[#6600cc]">Ragul</h5>
+                    {/* Profile Icon */}
+                    <div className="relative cursor-pointer z-index-5" onClick={() => setShowMenu(!showMenu)}>
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/7153/7153150.png"
+                            alt="user"
+                            className="h-8 w-8 z-3"
+                            // onClick={() => window.location.replace("/Dashboard1/login")}
+                        />
+                        <h5 className="text-[#6600cc]">{user ? user.name : "Guest"}</h5>
                     </div>
+
+                    {/* Dropdown Menu */}
+                    {showMenu && (
+                        <div className="absolute right-0 mt-10 w-15 bg-white shadow-lg rounded">
+                            {user ? (
+                                <>
+                                    <button className="text-center hover:bg-gray-200" onClick={() => logout()}>
+                                        Logout
+                                    </button>
+                                </>
+                            ) : (
+                                <button className="w-full px-4 py-2 text-left hover:bg-gray-200" onClick={() => navigate("/")}>
+                                    Login
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </Container>
             </Container>
             <hr className="border-2 border-[#DDA0DD] w-full m-0 p-0 z-4 top-15 absolute fixed" />
@@ -48,7 +79,7 @@ const Dashboard1 = () => {
                         <img src="https://cdn-icons-png.flaticon.com/512/8751/8751003.png" className="w-7 h-7 justify-center" />
                         Home
                     </li>
-                    <li className="li_style flex flex-row" onClick={() => navigate("/User")}>  {/*Extract Component */}
+                    <li className="li_style flex flex-row" onClick={() => navigate("/Dashboard1/User")}>  {/*Extract Component */}
                         <img src="https://cdn-icons-png.flaticon.com/512/10813/10813372.png"
                             className="w-7 h-7"
                             alt="user"
@@ -81,10 +112,9 @@ const Dashboard1 = () => {
             >
                 <AuthProvider>
                     <Routes>
-                        <Route path="/" element={<h2 className="text-center text-[#9933ff]">Welcome to Dashboard</h2>} />
-                        <Route path="/Login" element={<Create_Context />} />
-                        {/* <Route path="/Login" element={<Login_Tailwind_css />} /> */}
-                        <Route path="/User" element={<User_DataTable />} />
+                        <Route path="/*" element={<h2 className="text-center text-[#9933ff]">Welcome to Dashboard</h2>} />
+                        {/* <Route path="/login" element={<Create_Context />} /> */}
+                        <Route path="User" element={<User_DataTable />} />
                     </Routes>
                 </AuthProvider>
             </div>
