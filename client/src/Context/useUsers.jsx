@@ -8,26 +8,22 @@ const useUsers = () => {
     const { user } = useAuth(); //Get Logged In User
 
 
-    useEffect(() => {
-        //console.log("User:", user);
-        if (user) {
-            const fetchData = async () => {
-                try {
-                    const response = await axios.get("https://jsonplaceholder.typicode.com/users")
-                    //console.log("fetch Users", response.data)
-                    setUsers(response.data);
-                }
-                catch (error) {
-                    console.log("Error Fetching User", error);
-                }
-            };
-            fetchData();
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get("http://localhost:5000/api/users");
+            setUsers(response.data);
+        } catch (error) {
+            console.error("Error Fetching Users:", error);
         }
+    };
 
-
+    useEffect(() => {
+        if (user) {
+            fetchUsers();
+        }
     }, [user]);
 
-    return { users, setUsers }
+    return { users, setUsers, fetchUsers };
 };
 
 export default useUsers;

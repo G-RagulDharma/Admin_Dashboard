@@ -1,36 +1,48 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useState, useRef, useContext } from "react"
 import axios from "axios";
 import DataTable from 'react-data-table-component';
 import useUsers from "../Context/useUsers";
 import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { FaChevronDown } from "react-icons/fa";
 import useExportPDF from "../hooks/useExportPDF";
+import UserForm from "./UserForm";
 
 const UserDataTable = () => {
 
-    const { users, setUser } = useUsers();
+    const { users, setUser,fetchUsers } = useUsers();
     const [showMenu, setShowMenu] = useState(false);
-
-    const {exportToPDF} = useExportPDF();
+    const [editUser, setEditUser] = useState(null); //store user data
+    const { exportToPDF } = useExportPDF();
 
     const tableRef = useRef(null);
 
+    // Handle filtering
     function handleFilter(event) {
-        const newData = users.filter(row => {
-            return row.name.toLowerCase().includes(event.target.value.toLowerCase())
-        })
-        setUser(newData)
+        const query = event.target.value.toLowerCase();
+        const filteredData = users.filter(row => row.name.toLowerCase().includes(query));
+        setUser(filteredData);
     }
+
+    const handleEdit = (user) => {
+        console.log(`Edit clicked for ID: ${user._id}`, user);
+        setEditUser(user);
+    };
+
+    // Handle delete
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:5000/api/delete/${id}`);
+            console.log(`User Deleted with ID: ${id}`);
+            fetchUsers();
+        } catch (error) {
+            console.error("Error Deleting User", error);
+        }
+    };
 
     const columns = [
         {
             name: 'Name',
             selector: row => row.name,
-            sortable: true
-        },
-        {
-            name: 'Username',
-            selector: row => row.username,
             sortable: true
         },
         {
@@ -40,23 +52,29 @@ const UserDataTable = () => {
         },
         {
             name: 'Address',
-            selector: row => `${row.address.street}, ${row.address.city}`,
+            selector: row => row.address,
             sortable: true
         },
         {
             name: 'Phone',
             selector: row => row.phone,
             sortable: true
-        },
-        {
-            name: 'Website',
-            selector: row => row.website,
-            sortable: true
-        },
-        {
-            name: 'Company Name',
-            selector: row => row.company.name,
-            sortable: true
+        }, {
+            name: 'Actions',
+            cell: (row) => (
+                <div className="flex gap-2">
+                    <button
+                        className="bg-blue-500 text-white px-2 py-1 rounded"
+                        onClick={() => handleEdit(row)}>
+                        Edit
+                    </button>
+                    <button
+                        className="bg-red-500 text-white px-2 py-1 rounded"
+                        onClick={() => handleDelete(row._id)}>
+                        Delete
+                    </button>
+                </div>
+            )
         }
 
     ]
@@ -82,24 +100,18 @@ const UserDataTable = () => {
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Username</th>
                                 <th>Email</th>
                                 <th>Address</th>
                                 <th>Phone</th>
-                                <th>Website</th>
-                                <th>Company Name</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users.map((user, index) => (
                                 <tr key={index}>
                                     <td>{user.name}</td>
-                                    <td>{user.username}</td>
                                     <td>{user.email}</td>
-                                    <td>{`${user.address.street}, ${user.address.city}`}</td>
+                                    <td>{user.address}</td>
                                     <td>{user.phone}</td>
-                                    <td>{user.website}</td>
-                                    <td>{user.company.name}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -119,19 +131,26 @@ const UserDataTable = () => {
                         <DownloadTableExcel
                             filename="users table"
                             sheet="users"
-                            // currentTableRef={tableRef.current}
+                            currentTableRef={tableRef.current}
                         >
                             <button className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
                                 Export To Excel
                             </button>
                         </DownloadTableExcel>
-                        <button onClick={()=>exportToPDF(users)} className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
+                        <button onClick={() => exportToPDF(users)} className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100">
                             Export to PDF
                         </button>
                     </div>
                 )}
 
             </div>
+
+            {/* User Form for Adding/Editing */}
+            <UserForm
+                editUser={editUser}
+                setEditUser={setEditUser}
+                fetchUsers={fetchUsers}
+            />
 
         </div >
     )
