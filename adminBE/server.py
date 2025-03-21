@@ -5,13 +5,12 @@ from bson.objectid import ObjectId
 
 app=Flask(__name__)
 
-# Allow CORS for specific origin or all origins
-CORS(app)  # React app port
+CORS(app)  
 
 # Database connection
 client=MongoClient("mongodb://localhost:27017/")
-db=client["userdb"] #Database Name
-collection=db["users"] # Collection name
+db=client["userdb"] 
+collection=db["users"] 
 
 #Fetch
 @app.route('/api/users',methods=['GET'])
@@ -33,7 +32,6 @@ def addUsers():
 def updateUsers(id):
     try:
         data = request.json
-        # Convert ID to ObjectId before querying
         result = collection.update_one(
             {"_id": ObjectId(id)},
             {"$set": data}
@@ -51,7 +49,6 @@ def updateUsers(id):
 @app.route('/api/delete/<id>', methods=['DELETE'])
 def deleteUsers(id):
     try:
-        # Convert ID to ObjectId
         result = collection.delete_one({"_id": ObjectId(id)})
 
         if result.deleted_count > 0:

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Container from "react-bootstrap/esm/Container";
 
-const UserForm = ({ editUser, setEditUser, fetchUsers }) => {
+const UserForm = ({ editUser, setEditUser, fetchUsers ,setShowForm}) => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
@@ -40,7 +40,8 @@ const UserForm = ({ editUser, setEditUser, fetchUsers }) => {
             }
 
             fetchUsers();           
-            setEditUser(null);      
+            setEditUser(null);   
+            setShowForm(false) //Unshown Form 
         } catch (error) {
             console.error("Error submitting user data:", error);
         }
